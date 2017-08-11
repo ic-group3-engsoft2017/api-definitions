@@ -1,0 +1,106 @@
+swagger: '2.0'
+info:
+  description: API de categorias da Equipe 3
+  version: "1.0.0"
+  title: Categorias API
+  # put the contact info for your development or API team
+  contact:
+    email: jorge.tavates.inatel@gmail.com
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+# tags are used for organizing operations
+tags:
+- name: leitura
+  description: Apenas operações de leitura de dados no sistema
+
+paths:
+  /categorias:
+    get:
+      tags:
+      - leitura
+      summary: Busca de categorias registradas no sistema
+      operationId: buscarCategorias
+      description: |
+        Passando alguns parametros, você pode realizar uma busca das categorias existentes com mais eficiência
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: pagina
+        description: numero da página a ser paginado
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 500
+      - in: query
+        name: tamanho
+        description: numero de registro em uma determinada página
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 100
+      - in: query
+        name: limite
+        description: numero máximo de registros a ser retornado sem paginação
+        type: integer
+        format: int32
+        minimum: 0
+        maximum: 1000
+      responses:
+        200:
+          description: busca realizada com sucesso
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Categoria'
+        400:
+          description: parâmetro incorreto
+definitions:
+  Categoria:
+    type: object
+    required:
+    - id
+    - nome
+    - produtos
+    - dataCriacao
+    properties:
+      id:
+        type: string
+        format: uuid
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      nome:
+        type: string
+        example: Livros Interessantes
+      dataCriacao:
+        type: string
+        format: int64
+        example: 2016-08-29T09:12:33.001Z
+      produtos:
+        $ref: '#/definitions/Produto'
+  Produto:
+    type: object
+    required:
+    - id
+    - nome
+    - descricao
+    properties:
+      id:
+        type: string
+        format: uuid
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      nome:
+        type: string
+        example: O Senhor dos Anéis
+      descricao:
+        type: string
+        example:  É impossível transmitir ao novo leitor todas as qualidades e o alcance do livro. Alternadamente cômica, singela, épica, monstruosa e diabólica, a narrativa desenvolve-se em meio a inúmeras mudanças de cenários e de personagens, num mundo imaginário absolutamente convincente em seu detalhes. Nas palavras do romancista Richard Hughes, ´quanto à amplitude imaginativa, a obra praticamente não tem paralelos e é quase igualmente notável na sua vividez e na habilidade narrativa, que mantêm o leitor preso página após página´. Tolkien criou em O Senhor dos anéis uma nova mitologia, num mundo inventado que demonstrou possuir um poder de atração atemporal.
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+# basePath: /v1/categorias
+schemes:
+ - https
+# Added by API Auto Mocking Plugin
+basePath: /jorges/categorias/1.0.0
