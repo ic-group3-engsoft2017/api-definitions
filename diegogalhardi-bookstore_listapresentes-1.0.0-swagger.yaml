@@ -4,7 +4,7 @@ swagger: '2.0'
 info:
   description: API para lista de presentes de produtos da bookstore
   version: 1.0.0
-  title: eCommerce BookStore
+  title: BookStore Gift Catalog
   # put the contact info for your development or API team
   contact:
     email: diegowsg@gmail.com
@@ -52,7 +52,7 @@ paths:
           format: int32
           minimum: 1
           maximum: 20
-          
+
         - in: query
           name: retornoPaginas
           description: quantidade maxima e minima de páginas a serem retornadas.
@@ -60,7 +60,7 @@ paths:
           format: int32
           minimum: 1
           maximum: 50
-          
+
       # Possíveis respostas para essa operação:
       responses:
         # Response code
@@ -99,7 +99,7 @@ paths:
           required: true
           type: integer
           format: int32
-          
+
       # Possíveis respostas para essa operação:
       responses:
         # Response code
@@ -109,7 +109,7 @@ paths:
           schema:
             $ref: "#/definitions/presente"
         400:
-          description: Parametro invalido  
+          description: Parametro invalido
 
     post:
       # Descrição do verbo
@@ -179,9 +179,9 @@ paths:
             $ref: "#/definitions/presente"
         400:
           description: Parametro invalido
-        404: 
+        404:
           description: Presente não encontrado
-        
+
     put:
       # Descrição do verbo
       description: |
@@ -248,7 +248,7 @@ definitions:
       descricao:
         type: string
         example: Empreendedorismo
-      categoria: 
+      categoria:
         type: string
         example: livro
       tipodelista:

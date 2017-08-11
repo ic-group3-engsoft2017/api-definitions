@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  description: Bookstore
+  description: Bookstore Categories Catalog
   version: 1.0.0
   title: Produtos mais vendidos
   # Our contact
