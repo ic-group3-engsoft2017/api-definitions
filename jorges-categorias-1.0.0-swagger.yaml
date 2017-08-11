@@ -51,13 +51,39 @@ paths:
         maximum: 1000
       responses:
         200:
-          description: busca realizada com sucesso
+          description: Sucesso
           schema:
             type: array
             items:
               $ref: '#/definitions/Categoria'
         400:
-          description: parâmetro incorreto
+          description: Valor incorreto de parâmetro
+        404:
+          description: Não encontrado
+  /categorias/{id}:
+    get:
+      tags:
+        - leitura
+      summary: Busca de uma categoria especifica
+      operationId: buscarCategoria
+      description: |
+       Passando o ID da categoria no path, você consegue obter uma Categoria especifica
+      produces:
+      - application/json
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+      responses:
+        200: 
+          description: Sucesso
+          schema:
+            $ref: '#/definitions/Categoria'
+        400:
+          description: Valor incorreto de parâmetro
+        404:
+          description: Não encontrado
 definitions:
   Categoria:
     type: object
@@ -103,4 +129,4 @@ host: virtserver.swaggerhub.com
 schemes:
  - https
 # Added by API Auto Mocking Plugin
-basePath: /jorges/categorias/1.0.0
+basePath: /categorias/1.0.0
