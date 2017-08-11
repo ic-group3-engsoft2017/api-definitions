@@ -2,7 +2,7 @@ swagger: '2.0'
 info:
   description: API de categorias da Equipe 3
   version: "1.0.0"
-  title: Categorias API
+  title: Bookstore Categories Catalog
   # put the contact info for your development or API team
   contact:
     email: jorge.tavates.inatel@gmail.com

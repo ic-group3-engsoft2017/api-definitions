@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  description: Bookstore Promotions
+  title: Bookstore Promotions Catalog
     email: developer@bookstore.com
   license:
     name: Apache 2.0
