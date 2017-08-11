@@ -44,6 +44,11 @@ paths:
         format: int32
         minimum: 1
         maximum: 200
+      - in: header
+        name: apitoken
+        description: api token.
+        type: string
+        required: true
       responses:
         200:
           description: Resultados da Busca com os valores
@@ -69,6 +74,11 @@ paths:
         description: Inventory item to add
         schema:
           $ref: '#/definitions/Oferta'
+      - in: header
+        name: apitoken
+        description: api token.
+        type: string
+        required: true
       responses:
         201:
           description: item criado
@@ -86,6 +96,11 @@ paths:
       parameters:
       - name: offerId
         in: path
+        type: string
+        required: true
+      - in: header
+        name: apitoken
+        description: api token.
         type: string
         required: true
       responses:
@@ -114,6 +129,11 @@ paths:
           $ref: '#/definitions/Oferta'
       - name: offerId
         in: path
+        type: string
+        required: true
+      - in: header
+        name: apitoken
+        description: api token.
         type: string
         required: true
       responses:
