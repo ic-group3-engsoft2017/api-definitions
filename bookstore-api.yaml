@@ -5,7 +5,7 @@ info:
   title: Bookstore APIs
   # put the contact info for your development or API team
   contact:
-    email: developer@bookstore.com
+    email: pegorarohluiz@gmail.com
 
   license:
     name: Apache 2.0
@@ -22,7 +22,7 @@ paths:
     get:
       tags:
       - sellers
-      summary: Recupera o Token que expira após a transação ficar suspensa 2 minutos  
+      summary: Recupera o Token que expira após a transação ficar suspensa 2 minutos
       operationId: authenticate
       description: |
         Recupera token para utilização nas transações confidenciais.
@@ -54,7 +54,7 @@ paths:
             type: string
             items:
               description: token para utilização
-        403: 
+        403:
           description: senha para cnpj está incorreta
         404:
           description: cnpj não foi encontrado
@@ -62,7 +62,7 @@ paths:
     get:
       tags:
       - admins
-      summary: Recupera os afiliados ao sistema 
+      summary: Recupera os afiliados ao sistema
       operationId: getSellers
       description: |
         Por default vem paginado com no máximo 30 items por página e no máximo 200 páginas
@@ -120,14 +120,14 @@ paths:
           description: Requisição negada, objeto inválido
         409:
           description: Item já existente
-  /afiliados/{cnpj}: 
+  /afiliados/{cnpj}:
     delete:
-      tags: 
+      tags:
       - admins
-      summary: Desativa um Afiliado 
+      summary: Desativa um Afiliado
       operationId: remmoveSeller
       description: Revoga as ofertas do Afiliado da loja e deixa o Afiliado inativo
-      parameters: 
+      parameters:
       - name: cnpj
         in: path
         type: string
@@ -143,7 +143,7 @@ paths:
         405:
           description: Não pode remover um Afiliado já inativo
     put:
-      tags: 
+      tags:
       - admins
       summary: Atualiza informações do afiliado
       description: Atualiza as informações do afiliado. Todos menos o cnpj podem ser alterados.
@@ -154,7 +154,7 @@ paths:
         schema:
           $ref: '#/definitions/Seller'
       - name: cnpj
-        in: path 
+        in: path
         type: string
         required: true
         description: Cnpj do afiliado a ser removido.

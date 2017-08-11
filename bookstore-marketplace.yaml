@@ -4,12 +4,12 @@ info:
   version: 1.0.0
   title: Bookstore Marketplace
   contact:
-    email: developer@bookstore.com
+    email: pegorarohluiz@gmail.com
 
 # tags are used for organizing operations
 tags:
 - name: admins
-  description: Administradores 
+  description: Administradores
 - name: sellers
   description: Exclusivo para Sellers, autenticado com chave única disponibilizado na seção de login, para gerenciamento de ofertas, produtos e pedidos
 
@@ -76,14 +76,14 @@ paths:
           description: Requisição negada, objeto inválido
         409:
           description: Item já existente
-  /ofertas/{offerId}: 
+  /ofertas/{offerId}:
     delete:
-      tags: 
+      tags:
       - sellers
       summary: Desativa uma Oferta
       operationId: removeOffer
-      description: Revoga a oferta do Afiliado 
-      parameters: 
+      description: Revoga a oferta do Afiliado
+      parameters:
       - name: offerId
         in: path
         type: string
@@ -98,7 +98,7 @@ paths:
         405:
           description: Não pode remover um Afiliado já inativo
     put:
-      tags: 
+      tags:
       - sellers
       summary: Atualiza informações da oferta
       description: Atualiza as informações da oferta. Todos menos o offerId podem ser alterados.
@@ -113,7 +113,7 @@ paths:
         schema:
           $ref: '#/definitions/Oferta'
       - name: offerId
-        in: path 
+        in: path
         type: string
         required: true
       responses:
@@ -153,12 +153,12 @@ definitions:
         type: integer
         format: int32
         example: 50
-  ProdutoBase: 
+  ProdutoBase:
     type: object
-    required: 
+    required:
     - id
     properties:
-      id: 
+      id:
         type: string
         format: uuid
         example: 3204692d-a120-4985-8984-c8859ea64dc1
