@@ -1,0 +1,199 @@
+swagger: '2.0'
+info:
+  description: Essa é a parte de APIs externas da Bookstore, aqui você conhece as principais features que podemos disponibilizar
+  version: 1.0.0
+  title: Bookstore APIs
+  # put the contact info for your development or API team
+  contact:
+    email: developer@bookstore.com
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+# tags are used for organizing operations
+tags:
+- name: sellers
+  description: Exclusivo para Sellers, autenticado com chave única disponibilizado na seção de login, para gerenciamento de ofertas, produtos e pedidos
+- name: admins
+  description: Exclusivo para Administradores criarem novos afiliados
+paths:
+  /authorization:
+    get:
+      tags:
+      - sellers
+      summary: Recupera o Token que expira após a transação ficar suspensa 2 minutos  
+      operationId: authenticate
+      description: |
+        Recupera token para utilização nas transações confidenciais.
+      produces:
+      - application/json
+      parameters:
+      - in: header
+        name: cnpj
+        description: o cnpj no formato '99999999999999'
+        required: true
+        type: string
+      - in: header
+        name: apitoken
+        description: a senha de conexão de api
+        required: true
+        type: string
+      - in: query
+        name: limit
+        description: número de transações para autenticar
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 50
+        required: false
+      responses:
+        200:
+          description: Retorna o token
+          schema:
+            type: string
+            items:
+              description: token para utilização
+        403: 
+          description: senha para cnpj está incorreta
+        404:
+          description: cnpj não foi encontrado
+  /afiliados:
+    get:
+      tags:
+      - admins
+      summary: Recupera os afiliados ao sistema 
+      operationId: getSellers
+      description: |
+        Por default vem paginado com no máximo 30 items por página e no máximo 200 páginas
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: searchString
+        description: Utilizando NativeQueryLanguage pode se fazer a busca que quiser,  exemplo "cnpj=123123,active=true,hasOffers=true"
+        required: false
+        type: string
+      - in: query
+        name: itemsPerPage
+        description: itens por página
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 30
+      - in: query
+        name: paginas
+        description: quantidade de páginas a serem retornadas.
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 200
+      responses:
+        200:
+          description: Resultados da Busca com os valores
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Seller'
+        400:
+          description: bad input parameter
+    post:
+      tags:
+      - admins
+      summary: Adiciona um novo afiliado
+      operationId: addSeller
+      description: Adiciona um novo afiliado
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: addSeller
+        description: Inventory item to add
+        schema:
+          $ref: '#/definitions/Seller'
+      responses:
+        201:
+          description: item criado
+        400:
+          description: Requisição negada, objeto inválido
+        409:
+          description: Item já existente
+  /afiliados/{cnpj}: 
+    delete:
+      tags: 
+      - admins
+      summary: Desativa um Afiliado 
+      operationId: remmoveSeller
+      description: Revoga as ofertas do Afiliado da loja e deixa o Afiliado inativo
+      parameters: 
+      - name: cnpj
+        in: path
+        type: string
+        required: true
+        description: Cnpj do seller a ser removido.
+      responses:
+        200:
+          description: OK
+        404:
+          description: Não encontrado
+        400:
+          description: Valor incorreto no parâmetro
+        405:
+          description: Não pode remover um Afiliado já inativo
+    put:
+      tags: 
+      - admins
+      summary: Atualiza informações do afiliado
+      description: Atualiza as informações do afiliado. Todos menos o cnpj podem ser alterados.
+      parameters:
+      - in: body
+        name: body
+        description: Informações para serem atualizadas do afiliado.
+        schema:
+          $ref: '#/definitions/Seller'
+      - name: cnpj
+        in: path 
+        type: string
+        required: true
+        description: Cnpj do afiliado a ser removido.
+      responses:
+        200:
+          description: OK
+        400:
+          description: Requisição negada, objeto inválido
+        404:
+          description: CNPJ não encontrado
+definitions:
+  Seller:
+    type: object
+    required:
+    - cnpj
+    - nome
+    - ativo
+    - dataDeInicioDeContrato
+    properties:
+      cnpj:
+        type: string
+        format: int32
+        example: '71.963.185/0001-88'
+      nome:
+        type: string
+        example: Meu amigo Pet-er
+      ativo:
+        type: boolean
+        example: true
+      dataDeInicioDeContrato:
+        type: string
+        format: int32
+        example: 2016-08-29T09:12:33.001Z
+      ofertasAtivas:
+        type: integer
+        format: int32
+        example: 50
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /lPegz/bookstore-api/1.0.0
+schemes:
+ - https

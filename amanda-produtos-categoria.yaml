@@ -1,0 +1,192 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: eCommerce Compra Fácil
+paths:
+  /produtos:
+    get:
+      description: >
+        Obtém uma lista de objetos `Produtos`.
+
+        Filtros de escopo podem ser usados para range de preços, quantidade de
+        produtos retornados, somente produtos em promoção,
+
+        Se quiser apenas produtos que tiveram alguma alteração a partir de uma
+        data, utilize o campo modificadoEm,
+
+        ou ainda utilize o campo categoria_id para filtrar produtos de uma
+        categoria específica.
+
+        Além disso, é possível definir a paginação dos resultados com os
+        parâmetros _offset e _limit.
+
+        Se você quiser apenas alguns dos atributos de produtos, use o parâmetro
+        _fields.
+      parameters:
+        - name: app-token
+          in: header
+          description: Identificador da app
+          required: true
+          type: string
+        - name: access-token
+          in: header
+          description: Identificador do usuário
+          required: true
+          type: string
+        - name: _limit
+          in: query
+          description: Quantidade de produtos retornados
+          required: true
+          type: integer
+          format: int32
+        - name: _offset
+          in: query
+          description: Por onde começar
+          required: true
+          type: integer
+          format: int32
+        - name: _fields
+          in: query
+          description: Campos que devem ser retornados no objeto Produtos.
+          required: false
+          type: string
+        - name: precoMinimo
+          in: query
+          description: Valor mínimo do produto
+          required: false
+          type: number
+          format: double
+        - name: precoMaximo
+          in: query
+          description: Valor máximo do produto
+          required: false
+          type: number
+          format: double
+        - name: modificadoEm
+          in: query
+          description: >-
+            Uma data de modificaçao para obter apenas os produtos que sofreram
+            alterações a partir daquela data
+          required: false
+          type: string
+          format: double
+        - name: categoria_id
+          in: query
+          description: >-
+            Se quiser apenas produtos de uma categoria específica, informe a
+            categoria neste campo
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: Sucesso
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/produto'
+        '401':
+          description: Não autorizado
+        '500':
+          description: Um erro inesperado aconteceu
+  '/produtos/{id}':
+    get:
+      description: |
+        Obtém os detalhes de um `Produto` específico.
+      parameters:
+        - name: app-token
+          in: header
+          description: Identificador da app
+          required: true
+          type: string
+        - name: access-token
+          in: header
+          description: Identificador do usuário
+          required: true
+          type: string
+        - name: id
+          in: path
+          description: Identificador do produto
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Sucesso
+          schema:
+            $ref: '#/definitions/produto'
+        '401':
+          description: Não autorizado
+  /categorias:
+    get:
+      description: |
+        Obtém uma lista das categorias de produtos que existem.
+      parameters:
+        - name: app-token
+          in: header
+          description: Identificador da app
+          required: true
+          type: string
+        - name: access-token
+          in: header
+          description: Identificador do usuário
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Sucesso
+          schema:
+            $ref: '#/definitions/Categorias'
+        '401':
+          description: Não autorizado
+definitions:
+  produto:
+    required:
+      - id
+      - nome
+    properties:
+      id:
+        type: integer
+        format: int64
+      nome:
+        type: string
+      descricao:
+        type: string
+      preco:
+        type: array
+        items:
+          $ref: '#/definitions/preco'
+      thumbnail:
+        type: string
+      promocao:
+        type: boolean
+      quantidade:
+        type: number
+      categoria_id:
+        type: number
+  preco:
+    properties:
+      tipo:
+        type: string
+      valor:
+        type: number
+      parcela:
+        type: string
+      parcelaValor:
+        type: number
+        format: double
+  Categorias:
+    required:
+      - id
+      - nome
+      - descricao
+    properties:
+      id:
+        type: integer
+      nome:
+        type: string
+      descricao:
+        type: string
+host: virtserver.swaggerhub.com
+basePath: /amd/teste/1.0.0
+schemes:
+  - https

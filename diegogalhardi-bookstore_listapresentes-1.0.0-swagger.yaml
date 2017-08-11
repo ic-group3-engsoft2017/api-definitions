@@ -1,0 +1,267 @@
+swagger: '2.0'
+
+# Metadados do documento
+info:
+  description: API para lista de presentes de produtos da bookstore
+  version: 1.0.0
+  title: eCommerce BookStore
+  # put the contact info for your development or API team
+  contact:
+    email: diegowsg@gmail.com
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+# tags are used for organizing operations
+tags:
+- name: admins
+  description: Secured Admin-only calls
+- name: developers
+  description: Operations available to regular developers
+
+paths:
+  # Lista dos recursos.
+  /presentes:
+    # Operações HTTP associadas a esse recurso
+    get:
+      # Descrição do verbo
+      description: |
+        Obtém uma lista de objetos 'Presentes'.
+        Filtro de escopo para tipo de lista (casamento, aniversario etc)
+      # Lista de parâmetros:
+      parameters:
+        # An example parameter that is in query and is required
+        -
+          name: app-token
+          in: header
+          description: Identificador da app
+          required: true
+          type: string
+        -
+          name: access-token
+          in: header
+          description: Identificador do usuário
+          required: true
+          type: string
+        -
+          in: query
+          name: itemsPorPagina
+          description: maximo e minimo de itens por página
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 20
+          
+        - in: query
+          name: retornoPaginas
+          description: quantidade maxima e minima de páginas a serem retornadas.
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 50
+          
+      # Possíveis respostas para essa operação:
+      responses:
+        # Response code
+        200:
+          description: Sucesso
+          # Esquema do objeto response
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/presente"
+        400:
+          description: parametro invalido
+  /presentes/{id}:
+    get:
+      description: |
+        Obtém os detalhes de um `Presente` específico.
+      # Lista de parâmetros:
+      parameters:
+        # Os parâmetros podem estar no path, na query, no header...
+        -
+          name: app-token
+          in: header
+          description: Identificador da app
+          required: true
+          type: string
+        -
+          name: access-token
+          in: header
+          description: Identificador do usuário
+          required: true
+          type: string
+        -
+          name: id
+          in: path
+          description: Identificador do presente
+          required: true
+          type: integer
+          format: int32
+          
+      # Possíveis respostas para essa operação:
+      responses:
+        # Response code
+        200:
+          description: Sucesso
+          # Esquema do objeto response
+          schema:
+            $ref: "#/definitions/presente"
+        400:
+          description: Parametro invalido  
+
+    post:
+      # Descrição do verbo
+      description: |
+        Cadastra um novo `Presente`.
+      # Lista de parâmetros:
+      parameters:
+        # An example parameter that is in query and is required
+        -
+          name: app-token
+          in: header
+          description: Identificador da app
+          required: true
+          type: string
+        -
+          name: access-token
+          in: header
+          description: Identificador do usuário
+          required: true
+          type: string
+        -
+          name: presente
+          in: body
+          description: Dados do presente que será criado
+          required: false
+          schema:
+            $ref: '#/definitions/presente'
+
+      # Possíveis respostas para essa operação:
+      responses:
+        # Response code
+        200:
+          description: Sucesso
+          # Esquema do objeto response
+          schema:
+            $ref: "#/definitions/presente"
+        400:
+          description: Paramentro invalido
+
+    delete:
+      # Descrição do verbo
+      description: |
+        Excluí toda a lista de `presentes`.
+      # Lista de parâmetros:
+      parameters:
+        # An example parameter that is in query and is required
+        -
+          name: app-token
+          in: header
+          description: Identificador da app
+          required: true
+          type: string
+        -
+          name: access-token
+          in: header
+          description: Identificador do usuário
+          required: true
+          type: string
+
+      # Possíveis respostas para essa operação:
+      responses:
+        # Response code
+        200:
+          description: Sucesso
+          # Esquema do objeto response
+          schema:
+            $ref: "#/definitions/presente"
+        400:
+          description: Parametro invalido
+        404: 
+          description: Presente não encontrado
+        
+    put:
+      # Descrição do verbo
+      description: |
+        Atualiza uma lista de objetos `Presentes`.
+      # Lista de parâmetros:
+      parameters:
+        # An example parameter that is in query and is required
+        -
+          name: app-token
+          in: header
+          description: Identificador da app
+          required: true
+          type: string
+        -
+          name: access-token
+          in: header
+          description: Identificador do usuário
+          required: true
+          type: string
+        -
+          name: categoria
+          in: query
+          description: Categoria de presente usada no filtro
+          required: false
+          type: string
+        -
+          name: id
+          in: path
+          description: Identificador do presente
+          required: true
+          type: number
+          format: int32
+
+      # Possíveis respostas para essa operação:
+      responses:
+        # Response code
+        200:
+          description: Sucesso
+          # Esquema do objeto response
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/presente"
+        404:
+          description: Presente não encontrado
+
+
+definitions:
+  presente:
+    required:
+      - id
+      - nome
+      - categoria
+      - tipodelista
+      - busca
+      - preco
+    properties:
+      id:
+        type: integer
+        format: int64
+      nome:
+        type: string
+        example: Pai rico Pai pobre
+      descricao:
+        type: string
+        example: Empreendedorismo
+      categoria: 
+        type: string
+        example: livro
+      tipodelista:
+        type: string
+        example: aniversario
+      busca:
+        type: string
+        example: nome
+      preco:
+        type: number
+        example: '20,00'
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /diegogalhardi/bookstore_listapresentes/1.0.0
+schemes:
+ - https

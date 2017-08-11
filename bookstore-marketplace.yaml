@@ -1,0 +1,164 @@
+swagger: '2.0'
+info:
+  description: Define as ações de um afiliado do Marketplace
+  version: 1.0.0
+  title: Bookstore Marketplace
+  contact:
+    email: developer@bookstore.com
+
+# tags are used for organizing operations
+tags:
+- name: admins
+  description: Administradores 
+- name: sellers
+  description: Exclusivo para Sellers, autenticado com chave única disponibilizado na seção de login, para gerenciamento de ofertas, produtos e pedidos
+
+paths:
+  /ofertas:
+    get:
+      tags:
+      - sellers
+      summary: Recupera ofertas do afiliado
+      operationId: getSellers
+      description: |
+        Por default vem paginado com no máximo 30 items por página e no máximo 200 páginas
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: searchString
+        description: Utilizando NativeQueryLanguage pode se fazer a busca que quiser,  exemplo "active=true,stock>0"
+        required: false
+        type: string
+      - in: query
+        name: itemsPerPage
+        description: itens por página
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 30
+      - in: query
+        name: paginas
+        description: quantidade de páginas a serem retornadas.
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 200
+      responses:
+        200:
+          description: Resultados da Busca com os valores
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Oferta'
+        400:
+          description: bad input parameter
+    post:
+      tags:
+      - sellers
+      summary: Adiciona uma nova oferta
+      operationId: addOffer
+      description: Adiciona um novo afiliado
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: addSeller
+        description: Inventory item to add
+        schema:
+          $ref: '#/definitions/Oferta'
+      responses:
+        201:
+          description: item criado
+        400:
+          description: Requisição negada, objeto inválido
+        409:
+          description: Item já existente
+  /ofertas/{offerId}: 
+    delete:
+      tags: 
+      - sellers
+      summary: Desativa uma Oferta
+      operationId: removeOffer
+      description: Revoga a oferta do Afiliado 
+      parameters: 
+      - name: offerId
+        in: path
+        type: string
+        required: true
+      responses:
+        200:
+          description: OK
+        404:
+          description: Não encontrado
+        400:
+          description: Valor incorreto no parâmetro
+        405:
+          description: Não pode remover um Afiliado já inativo
+    put:
+      tags: 
+      - sellers
+      summary: Atualiza informações da oferta
+      description: Atualiza as informações da oferta. Todos menos o offerId podem ser alterados.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        description: Informações para serem atualizadas do afiliado.
+        schema:
+          $ref: '#/definitions/Oferta'
+      - name: offerId
+        in: path 
+        type: string
+        required: true
+      responses:
+        200:
+          description: OK
+        400:
+          description: Requisição negada, objeto inválido
+        404:
+          description: CNPJ não encontrado
+definitions:
+  Oferta:
+    type: object
+    required:
+    - produtoBase
+    - offerId
+    - preço
+    - estoque
+    - vendavel
+    properties:
+      offerId:
+        type: string
+        format: uuid
+        example: 3204692d-a120-4985-8984-c8859ea64dc1
+      produtoBase:
+        $ref: '#/definitions/ProdutoBase'
+      nome:
+        type: string
+        example: Meu amigo Pet-er
+      vendavel:
+        type: boolean
+        example: true
+      preço:
+        type: number
+        format: int32
+        example: 199.99
+      estoque:
+        type: integer
+        format: int32
+        example: 50
+  ProdutoBase: 
+    type: object
+    required: 
+    - id
+    properties:
+      id: 
+        type: string
+        format: uuid
+        example: 3204692d-a120-4985-8984-c8859ea64dc1

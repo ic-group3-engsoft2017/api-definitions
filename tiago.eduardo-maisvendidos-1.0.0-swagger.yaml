@@ -1,0 +1,115 @@
+swagger: '2.0'
+info:
+  description: Bookstore
+  version: 1.0.0
+  title: Produtos mais vendidos
+  # Our contact
+  contact:
+    email: developers@bookstore.com
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+paths:
+  /maisvendidos/{categoria}:
+    get:
+      tags:
+      - maisvendidos
+      summary: Carrega itens mais vendidos
+      operationId: maisvendido
+      description: |
+        Itens mais vendidos do portal com base nas compras registradas na base da aplicacao. Sao listados itens onde as compras foram definitivamente efetivadas pelo processo de compra. A lista dos itens nao garante a disponibilidade do item no momento da consulta.
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: categoria
+        description: requer uma categoria para busca na base
+        required: true
+        type: string
+      - in: query
+        name: skip
+        description: numero de itens por pagina de carregamento
+        type: integer
+        format: int32
+        minimum: 0
+        maximum: 10
+      - in: query
+        name: limite
+        description: maximo de itens em um retorno de consulta
+        type: integer
+        format: int32
+        minimum: 0
+        maximum: 50
+      - in: path
+        name: categoria
+        description: identificador da categoria
+        required: true
+        type: string
+      responses:
+        200:
+          description: requisicao com sucesso
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/produto'
+        400:
+          description: erro na requisicao
+definitions:
+  produto:
+    type: object
+    required:
+    - id
+    - titulo
+    - descricao
+    - produtodetalhado
+    properties:
+      id:
+        type: string
+        format: uuid
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      titulo:
+        type: string
+        example: O Mundo de Sofia
+      descricao:
+        type: string
+        example: Livro de fantasia infantil
+      produtodetalhado:
+        $ref: '#/definitions/produtodetalhado'
+  produtodetalhado:
+    required:
+    - editora
+    - anopublicacao
+    - edicao
+    - paginas
+    - tipocapa
+    - preco
+    - imagemcapa
+    properties:
+      editora:
+        type: string
+        format: string
+        example:  Globo
+      anopublicacao:
+        type: object
+        example: 01/01/2017
+      edicao:
+        type: integer
+        example: 7
+      paginas:
+        type: integer
+        example: 450
+      tipocapa:
+        type: string
+        example: hardcover, hardback, paperback
+      preco:
+        type: number
+        example: 1.000,00
+      imagemcapa:
+        type: string
+        example: www.bookstore.com/imagem/produto/img_9897374752.jpg
+host: virtserver.swaggerhub.com
+basePath: /tiago.eduardo/maisvendidos/1.0.0
+schemes:
+ - https
